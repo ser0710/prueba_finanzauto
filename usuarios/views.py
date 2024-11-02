@@ -41,6 +41,17 @@ class LoginUsersView(APIView):
             "error": "Credenciales no validas"
         }, status=status.HTTP_401_UNAUTHORIZED)
     
+class UpdateUserView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def put(self, request):
+        user = request.user
+        serializer = UsersSerializer(user, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"message": "Información actualizada"}, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
 
 
 class UsersSettings(APIView):
