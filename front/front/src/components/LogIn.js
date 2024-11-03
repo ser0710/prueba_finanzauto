@@ -5,14 +5,23 @@ import { useNavigate } from "react-router-dom"
 
 const LogIn = () => {
     const [userData, setUserData] = useState({ username: '', password: '' })
+    const [errors, setErrors] = useState("")
 
     const { login } = useAuth();
     const navigate = useNavigate();
 
     const handleLogIn = async (e) => {
         e.preventDefault();
-        await login(userData);
-        navigate('/')
+        try{
+            await login(userData);
+            navigate('/')
+        } catch(error){
+            setErrors(error.message)
+        }
+    }
+
+    const handleRegister = () => {
+        navigate('/register')
     }
 
     return(
@@ -29,6 +38,8 @@ const LogIn = () => {
                 />
                 <button type="submit">Iniciar sesión</button>
             </form>
+            {errors}
+            <button onClick={handleRegister}>Registrarse</button>
         </div>
     )
 }

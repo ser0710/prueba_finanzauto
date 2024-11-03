@@ -13,10 +13,12 @@ from django.contrib.auth import authenticate
 class UsersView(APIView):
     def post(self, request):
         serializer = UsersSerializer(data=request.data)
+        print(request.data)
         if serializer.is_valid():
             user = serializer.save()
             refresh = RefreshToken.for_user(user)
             return Response({
+                "user": request.data.get("username"),
                 "message" : "Usuario creado",
                 "refresh" : str(refresh),
                 "access": str(refresh.access_token)

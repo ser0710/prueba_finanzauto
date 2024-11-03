@@ -4,36 +4,54 @@ from .models import Users
 import re
 
 class UsersSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(write_only=True)
 
     class Meta:
         model = Users
         fields = ['id', 'username', 'first_name', 'last_name', 'email', 'password']
         extra_kwargs = {
-            'email' : {'validators' : []},
-            'username' : {'validators' : []}
+            'username' : {'validators' : [], 'required': False, 'allow_blank': True},
+            'email': {'validators': [], 'required': False, 'allow_blank': True},
+            'password': {'validators': [], 'required': False, 'allow_blank': True},
         }
 
+    def validate(self, value):
+        errors = {}
+        email = value.get('email')
+        username = value.get('username')
+        password = value.get('password')
+        if email is None or email == "":
+            errors["email"] = "El correo no puede ser nulo."
+        if username is None or username == "":
+            errors["username"] = "El nombre de usuario no puede ser nulo."
+        if password is None or password == "":
+            errors["password"] = "La contraseña no puede ser nula."
+        if errors:
+            raise serializers.ValidationError(errors)
+        return value
+
     def validate_email(self, value):
-        if Users.objects.filter(email=value).exists():
+        if value and Users.objects.filter(email=value).exists():
             raise serializers.ValidationError("Correo ya en uso.")
         return value
     
     def validate_username(self, value):
-        if Users.objects.filter(username=value).exists():
+        if value and Users.objects.filter(username=value).exists():
             raise serializers.ValidationError("Un usuario con este nombre de usuario ya existe.")
         return value
     
     def validate_password(self, value):
-        errors = []
-        if len(value) < 8:
-            errors.append("Contraseña demasiado corta.")
-        if not re.search(r"[A-Z]", value):
-            errors.append("La contraseña debe tener al menos una letra mayúscula.")
-        if not re.search(r"[0-9]", value):
-            errors.append("La contraseña debe tener al menos un número")
-        if len(errors) > 0:
-            raise serializers.ValidationError("Existen los siguientes errores con la contraseña: " + ", ".join(errors))
+        if value:
+            errors = []
+            ob = {}
+            if len(value) < 8:
+                errors.append("Contraseña es demasiado corta.")
+            if not re.search(r"[A-Z]", value):
+                errors.append("La contraseña debe tener al menos una letra mayúscula.")
+            if not re.search(r"[0-9]", value):
+                errors.append("La contraseña debe tener al menos un número")
+            if len(errors) > 0:
+                ob["errors"] = errors 
+                raise serializers.ValidationError(ob)
         return value
 
 
