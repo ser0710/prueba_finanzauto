@@ -16,14 +16,11 @@ class UsersSerializer(serializers.ModelSerializer):
 
     def validate(self, value):
         errors = {}
-        email = value.get('email')
-        username = value.get('username')
-        password = value.get('password')
-        if email is None or email == "":
+        if 'email' in value and (value['email'] is None or value['email'] == ""):
             errors["email"] = "El correo no puede ser nulo."
-        if username is None or username == "":
+        if 'username' in value and (value['username'] is None or value['username'] == ""):
             errors["username"] = "El nombre de usuario no puede ser nulo."
-        if password is None or password == "":
+        if 'password' in value and (value['password'] is None or value['password'] == ""):
             errors["password"] = "La contraseña no puede ser nula."
         if errors:
             raise serializers.ValidationError(errors)
@@ -64,5 +61,8 @@ class UsersSerializer(serializers.ModelSerializer):
         new_password = validated_data.get('password', None)
         if new_password:
             instance.password = make_password(new_password)
+        for attr, value in validated_data.items():
+            if attr != 'password':
+                setattr(instance, attr, value)
         instance.save()
         return instance
