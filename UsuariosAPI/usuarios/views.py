@@ -33,6 +33,7 @@ class LoginUsersView(APIView):
         if user is not None:
             refresh = RefreshToken.for_user(user)
             return Response({
+                "user": username,
                 "message": "inicio de sesión",
                 "refresh": str(refresh),
                 "access": str(refresh.access_token)
