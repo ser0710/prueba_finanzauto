@@ -7,8 +7,6 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth import authenticate
 
-# Create your views here.
-
 
 class UsersView(APIView):
     def post(self, request):
