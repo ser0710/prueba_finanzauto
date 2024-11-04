@@ -10,6 +10,11 @@ const Home = () => {
 
     const [publications, setPublications] = useState([])
     const [all, setAll] = useState(true)
+    const [addPub, setAddPub] = useState(false)
+    const [newPub, setNewPub] = useState({
+        title: '',
+        content: ''
+    })
 
     const handleLogin = () => {
         navigate('/login');
@@ -36,19 +41,39 @@ const Home = () => {
     }
 
     useEffect(() => {
-        // const publi = async () => {
-        //     try{
-        //         const response = await axios.get('http://localhost:8001/api/publications/')
-        //         setPublications(response.data)
-        //     } catch(error){
-        //         console.log(error)
-        //     }
-        // }
-        // publi();
-        // if (user){
             publicationsHandler()
-        // }
     }, [all, user])
+
+    const handleCreatePub = (e) => {
+        setNewPub({...newPub, [e.target.name]: e.target.value})
+    }
+
+    const handleCreate = async (e) => {
+        e.preventDefault()
+        try {
+            const response = await axios.post('http://localhost:8001/api/publicate/', newPub, {
+                headers:{
+                    Token: localStorage.getItem('token')
+                }
+            })
+            const newPublication = {
+                id: response.data.id,
+                title: newPub.title,
+                content: newPub.content
+            }
+            setPublications((prev) => [...prev, newPublication])
+            setNewPub({ title: '', content: '' });
+            setAddPub(false)
+        } catch(error){
+            console.log(error)
+        }
+        
+    }
+
+    const handleCancel = () => {
+        setNewPub({ title: '', content: '' });
+        setAddPub(false)
+    }
 
     return(
         <div>
@@ -68,8 +93,18 @@ const Home = () => {
                     <li key={index}><h2>{pub.title}</h2><h4>{pub.content}</h4></li>
                     
                 ))}
+                {!addPub && user && (<li><button onClick={() => setAddPub(true)}>Agregar</button></li>)}
             </ul>
-            
+            {addPub && (
+            <div>
+                <form onSubmit={handleCreate}>
+                    <input name="title" onChange={handleCreatePub}></input>
+                    <input name="content" onChange={handleCreatePub}></input>
+                    <button type="submit">Guardar</button>
+                    <button type="button" onClick={handleCancel}>Cancelar</button>
+                </form>
+            </div>
+            )}
         </div>
     )
 
