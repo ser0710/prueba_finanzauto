@@ -70,9 +70,22 @@ const Home = () => {
         
     }
 
-    const handleCancel = () => {
+    const handleCancel =  () => {
         setNewPub({ title: '', content: '' });
         setAddPub(false)
+    }
+
+    const handleDelete = async (index) => {
+        try {
+            const response = await axios.delete(`http://localhost:8001/api/publication/${index}/`, {
+                headers:{
+                    Token: localStorage.getItem('token')
+                }
+            })
+            setPublications((prev) => prev.filter(pub => pub.id !== index));
+        } catch(error){
+            console.log(error)
+        }
     }
 
     return(
@@ -90,7 +103,11 @@ const Home = () => {
             }
             <ul>
                 {publications.map((pub, index) => (
-                    <li key={index}><h2>{pub.title}</h2><h4>{pub.content}</h4></li>
+                    <li key={index}>
+                        <h2>{pub.title}</h2>
+                        <h4>{pub.content}</h4>
+                        {user && pub.user == idUser && (<button onClick={() => handleDelete(pub.id)}>borrar</button>)}
+                    </li>
                     
                 ))}
                 {!addPub && user && (<li><button onClick={() => setAddPub(true)}>Agregar</button></li>)}
