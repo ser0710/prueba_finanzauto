@@ -25,7 +25,7 @@ const UserData = () => {
                 try {
                     const response = await axios.get('http://localhost:8000/api/user_data/', {
                         headers: {
-                            Authorization: `Bearer ${localStorage.getItem('token')}`
+                            Authorization: `Bearer ${sessionStorage.getItem('token')}`
                         }
                     })
                     setUserData(response.data)
@@ -55,7 +55,7 @@ const UserData = () => {
             if(Object.keys(dataUpdated).length > 0){
                 await axios.put('http://localhost:8000/api/update_user/', dataUpdated, {
                     headers: {
-                        Authorization: `Bearer ${localStorage.getItem('token')}`
+                        Authorization: `Bearer ${sessionStorage.getItem('token')}`
                     }
                 })
             }

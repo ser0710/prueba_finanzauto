@@ -4,6 +4,10 @@ from rest_framework import status
 from .utils import get_user_data
 from rest_framework.response import Response
 from .models import Publications
+from rest_framework.pagination import PageNumberPagination
+
+class Pagination(PageNumberPagination):
+    page_size = 2
 
 class PublicationsView(APIView):   
 
@@ -24,8 +28,11 @@ class PublicationsView(APIView):
         user_data = get_user_data(token)
         if user_data:
             publications = Publications.objects.filter(user=pk)
-            serializer = PublicationsSerializer(publications, many=True)
-            return Response(serializer.data, status=status.HTTP_200_OK)
+            paginator = Pagination()
+            pagi_publi = paginator.paginate_queryset(publications, request)
+            serializer = PublicationsSerializer(pagi_publi, many=True)
+            return paginator.get_paginated_response(serializer.data)
+            # return Response(serializer.data, status=status.HTTP_200_OK)
         return Response({"error": "Error con el token de usuario"}, status=status.HTTP_401_UNAUTHORIZED)
     
     def delete(self, request, pk):
@@ -41,5 +48,8 @@ class PublicationsView(APIView):
 class AllPublicationsView(APIView):
     def get(self, request):
         publications = Publications.objects.all()
-        serializer = PublicationsSerializer(publications, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        paginator = Pagination()
+        pagi_publi = paginator.paginate_queryset(publications, request)
+        serializer = PublicationsSerializer(pagi_publi, many=True)
+        return paginator.get_paginated_response(serializer.data)
+        # return Response(serializer.data, status=status.HTTP_200_OK)

@@ -143,4 +143,5 @@ CORS_ALLOW_ALL_ORIGINS = True
 
 CORS_ALLOW_HEADERS = list(default_headers) + [
     'token',
+    'params'
 ]

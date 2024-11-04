@@ -15,7 +15,10 @@ const Home = () => {
         title: '',
         content: ''
     })
-
+    const [nextPage, setNextPage] = useState(null)
+    const [prevPage, setPrevPage] = useState(null)
+    const [current, setCurrent] = useState('http://localhost:8001/api/publications/')
+ 
     const handleLogin = () => {
         navigate('/login');
     }
@@ -26,14 +29,19 @@ const Home = () => {
 
     const publicationsHandler = async () => {
         try{
-            const response = all 
-            ? await axios.get('http://localhost:8001/api/publications/') 
-            : await axios.get(`http://localhost:8001/api/publication/${idUser}/`, {
+
+            // const url = all 
+            // ? current
+            // : `http://localhost:8001/api/publication/${idUser}/`
+            const response = await axios.get(current, {
                 headers:{
-                    Token: localStorage.getItem('token')
+                    Token: sessionStorage.getItem('token'),
+                    params: { page: current }
                 }
             })
-            setPublications(response.data)
+            setPublications(response.data.results)
+            setNextPage(response.data.next)
+            setPrevPage(response.data.previous)
 
         } catch(error){
             console.log(error)
@@ -42,7 +50,7 @@ const Home = () => {
 
     useEffect(() => {
             publicationsHandler()
-    }, [all, user])
+    }, [all, user, current])
 
     const handleCreatePub = (e) => {
         setNewPub({...newPub, [e.target.name]: e.target.value})
@@ -53,7 +61,7 @@ const Home = () => {
         try {
             const response = await axios.post('http://localhost:8001/api/publicate/', newPub, {
                 headers:{
-                    Token: localStorage.getItem('token')
+                    Token: sessionStorage.getItem('token')
                 }
             })
             const newPublication = {
@@ -79,13 +87,25 @@ const Home = () => {
         try {
             const response = await axios.delete(`http://localhost:8001/api/publication/${index}/`, {
                 headers:{
-                    Token: localStorage.getItem('token')
+                    Token: sessionStorage.getItem('token')
                 }
             })
             setPublications((prev) => prev.filter(pub => pub.id !== index));
         } catch(error){
             console.log(error)
         }
+    }
+
+    const handleNextPage = () => {
+        if (nextPage){
+            setCurrent(nextPage)
+        } 
+    }
+
+    const handlePrevPage = () => {
+        if (prevPage) {
+            setCurrent(prevPage)
+        } 
     }
 
     return(
@@ -96,8 +116,8 @@ const Home = () => {
             {
                 user && (
                     <div>
-                        <button onClick={() => setAll(true)}>Ver todas</button>
-                        <button onClick={() => setAll(false)}>ver las mias</button>
+                        <button onClick={() => { setAll(true); setCurrent('http://localhost:8001/api/publications/') }}>Ver todas</button>
+                        <button onClick={() => { setAll(false); setCurrent(`http://localhost:8001/api/publication/${idUser}/`) }}>ver las mias</button>
                     </div>    
                 )
             }
@@ -112,6 +132,10 @@ const Home = () => {
                 ))}
                 {!addPub && user && (<li><button onClick={() => setAddPub(true)}>Agregar</button></li>)}
             </ul>
+            <div>
+                {prevPage && (<button onClick={handlePrevPage}>Anterior</button>)}
+                {nextPage && (<button onClick={handleNextPage}>Siguiente</button>)}
+            </div>
             {addPub && (
             <div>
                 <form onSubmit={handleCreate}>

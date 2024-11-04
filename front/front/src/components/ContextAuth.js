@@ -7,15 +7,15 @@ export const useAuth = () => useContext(Context);
 
 const ConstAuth = ({ children }) => {
 
-    const [user, setUser] = useState(localStorage.getItem("user"))
-    const [idUser, setIdUser] = useState(localStorage.getItem("id"))
+    const [user, setUser] = useState(sessionStorage.getItem("user"))
+    const [idUser, setIdUser] = useState(sessionStorage.getItem("id"))
 
     const login = async (credentials) => {
         try {
             const response = await axios.post('http://localhost:8000/api/login/', credentials)
-            localStorage.setItem('token', response.data.access)
-            localStorage.setItem('user', response.data.user)
-            localStorage.setItem('id', response.data.id)
+            sessionStorage.setItem('token', response.data.access)
+            sessionStorage.setItem('user', response.data.user)
+            sessionStorage.setItem('id', response.data.id)
             setUser(response.data.user)
             setIdUser(response.data.id)
         } catch (error){
@@ -26,9 +26,9 @@ const ConstAuth = ({ children }) => {
     const register = async (credentials) => {
         try{
             const response = await axios.post("http://localhost:8000/api/register/", credentials)
-            localStorage.setItem('token', response.data.access)
-            localStorage.setItem('user', response.data.user)
-            localStorage.setItem('id', response.data.id)
+            sessionStorage.setItem('token', response.data.access)
+            sessionStorage.setItem('user', response.data.user)
+            sessionStorage.setItem('id', response.data.id)
             setUser(response.data.user)
             setIdUser(response.data.id)
         } catch(error){
