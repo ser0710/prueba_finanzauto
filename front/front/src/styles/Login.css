@@ -1,0 +1,22 @@
+.cardInit {
+    height: 25vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 10%;
+    margin-right: 10%;
+}
+
+.bodyInit {
+    display: flex; 
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 8%;
+}
+
+.btn_register{
+    margin-top: 3%;
+    display: flex;
+    justify-content: flex-end;
+}

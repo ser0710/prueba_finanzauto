@@ -2,6 +2,7 @@ import { useAuth } from "./ContextAuth"
 import { useEffect, useState } from "react"
 import axios from "axios"
 import { useNavigate } from "react-router-dom"
+import '../styles/UserData.css'
 
 const UserData = () => {
     const navigate = useNavigate();
@@ -71,29 +72,39 @@ const UserData = () => {
         }
     }
 
+    const handleCancelChange = () => {
+        navigate('/')
+    }
+
     return(
-        <div>
+        <div className="container">
             <h1>Perfil de Usuario</h1>
             <form onSubmit={handleSubmit}>
-                <h3>Nombre de usuario</h3>
-                <input name="username" value={userData.username} onChange={handleChangeData}></input>
-                <h3>email</h3>
-                <input name="email" value={userData.email} onChange={handleChangeData}></input>
-                <h3>Nombre</h3>
-                <input name="first_name" value={userData.first_name} onChange={handleChangeData}></input>
-                <h3>Apellido</h3>
-                <input name="last_name" value={userData.last_name} onChange={handleChangeData}></input>
-                <input name="last_name" value={userData.id} onChange={handleChangeData}></input>
-                
-                {errors.length > 0 && (
-                    <ul>
-                        {errors.map((error, index) => (
-                            error.trim() && <li key={index}>{error.trim()}</li>
-                        ))}
-                    </ul>
-                )}
-                <div>
-                    <button type="submit">Actualizar</button>
+                <div className="card cardData">
+                    <div className="card-body bodyData">
+                        <h3>Nombre de usuario</h3>
+                        <input name="username" value={userData.username} onChange={handleChangeData}></input>
+                        <h3>email</h3>
+                        <input name="email" value={userData.email} onChange={handleChangeData}></input>
+                        <h3>Nombre</h3>
+                        <input name="first_name" value={userData.first_name} onChange={handleChangeData}></input>
+                        <h3>Apellido</h3>
+                        <input name="last_name" value={userData.last_name} onChange={handleChangeData}></input>
+                        
+                        {errors.length > 0 && (
+                            <ul>
+                                {errors.map((error, index) => (
+                                    error.trim() && <li key={index}>{error.trim()}</li>
+                                ))}
+                            </ul>
+                        )}
+                        <div  id="btn_actu">
+                            <button class="btn btn-primary" type="submit">Actualizar</button>
+                        </div>
+                        <div  id="btn_actu">
+                            <button class="btn btn-danger" onClick={handleCancelChange}>Cancelar</button>
+                        </div>
+                    </div>
                 </div>
             </form>
             

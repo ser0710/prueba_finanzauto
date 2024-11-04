@@ -1,0 +1,18 @@
+.cardData {
+    height: 60vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.bodyData {
+    display: flex; 
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; 
+}
+
+#btn_actu{
+    margin-top: 5%;
+}

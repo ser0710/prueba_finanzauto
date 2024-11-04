@@ -49,8 +49,16 @@ const ConstAuth = ({ children }) => {
         }
     }
 
+    const logout = () => {
+        sessionStorage.removeItem('token');
+        sessionStorage.removeItem('user');
+        sessionStorage.removeItem('id');
+        setUser(null);
+        setIdUser(null);
+    };
+
     return (
-        <Context.Provider value={{ user, login, register, idUser }}>
+        <Context.Provider value={{ user, login, register, idUser, logout }}>
             {children}
         </Context.Provider>
     )

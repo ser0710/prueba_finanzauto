@@ -17,7 +17,7 @@ class PublicationsView(APIView):
         if user_data:
             serializer = PublicationsSerializer(data=request.data)
             if serializer.is_valid():
-                serializer.save(user=user_data['id'])
+                serializer.save(user=user_data['id'], username=user_data['username'])
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         else:
@@ -32,7 +32,6 @@ class PublicationsView(APIView):
             pagi_publi = paginator.paginate_queryset(publications, request)
             serializer = PublicationsSerializer(pagi_publi, many=True)
             return paginator.get_paginated_response(serializer.data)
-            # return Response(serializer.data, status=status.HTTP_200_OK)
         return Response({"error": "Error con el token de usuario"}, status=status.HTTP_401_UNAUTHORIZED)
     
     def delete(self, request, pk):
@@ -52,4 +51,3 @@ class AllPublicationsView(APIView):
         pagi_publi = paginator.paginate_queryset(publications, request)
         serializer = PublicationsSerializer(pagi_publi, many=True)
         return paginator.get_paginated_response(serializer.data)
-        # return Response(serializer.data, status=status.HTTP_200_OK)

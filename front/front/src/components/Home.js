@@ -2,9 +2,12 @@ import { useNavigate } from "react-router-dom"
 import { useAuth } from "./ContextAuth";
 import { useEffect, useState } from "react";
 import axios from "axios"
+import PubliList from "./PubliList";
+import '../styles/Home.css'
+import CreatePubForm from "./CreatePubForm";
 
 const Home = () => {
-    const { user, idUser } = useAuth();
+    const { user, idUser, logout } = useAuth();
 
     const navigate = useNavigate();
 
@@ -29,10 +32,6 @@ const Home = () => {
 
     const publicationsHandler = async () => {
         try{
-
-            // const url = all 
-            // ? current
-            // : `http://localhost:8001/api/publication/${idUser}/`
             const response = await axios.get(current, {
                 headers:{
                     Token: sessionStorage.getItem('token'),
@@ -67,7 +66,8 @@ const Home = () => {
             const newPublication = {
                 id: response.data.id,
                 title: newPub.title,
-                content: newPub.content
+                content: newPub.content,
+                username: newPub.username
             }
             setPublications((prev) => [...prev, newPublication])
             setNewPub({ title: '', content: '' });
@@ -108,47 +108,59 @@ const Home = () => {
         } 
     }
 
+    const handleCloseSession = async () => {
+        try{
+            await logout()
+            navigate('/')
+        } catch(error){
+            console.log(error)
+        }
+
+    }
+
     return(
         <div>
-            {user ? "hola desde home " + user :  "hola desde home" }
-            {user ? (<button>Cerrar sesión</button>) : (<button onClick={handleLogin}>Iniciar sesión</button>)}
-            {user ? (<button onClick={handleUserInfo}>Editar perfil</button>) : null}
+            <div className="container">
+                <div className="header">
+                    {user ? <h1>{"Publicaciones de: " + user}</h1> :  <h1>{"Publicaciones"}</h1> }
+                    <div>
+                        {user ? (<button class="btn btn-secondary" onClick={handleUserInfo}>Editar perfil</button>) : null}
+                        {user ? (<button class="btn btn-secondary" onClick={handleCloseSession}>Cerrar sesión</button>) : (<button class="btn btn-secondary" onClick={handleLogin}>Iniciar sesión</button>)}
+                    </div>
+
+                </div>
+            </div>
             {
                 user && (
-                    <div>
-                        <button onClick={() => { setAll(true); setCurrent('http://localhost:8001/api/publications/') }}>Ver todas</button>
-                        <button onClick={() => { setAll(false); setCurrent(`http://localhost:8001/api/publication/${idUser}/`) }}>ver las mias</button>
+                    <div className="container center_btn"  >
+                        <button class="btn btn-secondary" onClick={() => { setAll(true); setCurrent('http://localhost:8001/api/publications/') }}>Ver todas</button>
+                        <button class="btn btn-secondary" onClick={() => { setAll(false); setCurrent(`http://localhost:8001/api/publication/${idUser}/`) }}>ver las mias</button>
                     </div>    
                 )
             }
-            <ul>
-                {publications.map((pub, index) => (
-                    <li key={index}>
-                        <h2>{pub.title}</h2>
-                        <h4>{pub.content}</h4>
-                        {user && pub.user == idUser && (<button onClick={() => handleDelete(pub.id)}>borrar</button>)}
-                    </li>
-                    
-                ))}
-                {!addPub && user && (<li><button onClick={() => setAddPub(true)}>Agregar</button></li>)}
-            </ul>
-            <div>
-                {prevPage && (<button onClick={handlePrevPage}>Anterior</button>)}
-                {nextPage && (<button onClick={handleNextPage}>Siguiente</button>)}
+            <div className="container">
+                <PubliList publi={publications} handleDelete={handleDelete}></PubliList>
             </div>
+            <div className="container center_btn">
+                {!addPub && user && (<button class="btn btn-primary" onClick={() => setAddPub(true)}>Agregar</button>)}
+            </div>
+            
+
+            <div className="btn-container container">
+                <div id="btn_prev">
+                    {prevPage && (<button class="btn btn-secondary" onClick={handlePrevPage}>Anterior</button>)}
+                </div>
+                <div id="btn_next">
+                    {nextPage && (<button class="btn btn-secondary" onClick={handleNextPage}>Siguiente</button>)}
+                </div>
+                
+            </div>
+
             {addPub && (
-            <div>
-                <form onSubmit={handleCreate}>
-                    <input name="title" onChange={handleCreatePub}></input>
-                    <input name="content" onChange={handleCreatePub}></input>
-                    <button type="submit">Guardar</button>
-                    <button type="button" onClick={handleCancel}>Cancelar</button>
-                </form>
-            </div>
+                <CreatePubForm handleCreatePub={handleCreatePub} handleCreate={handleCreate} handleCancel={handleCancel}></CreatePubForm>
             )}
+
         </div>
     )
-
 }
-
 export default Home
