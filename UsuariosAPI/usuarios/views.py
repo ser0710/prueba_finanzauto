@@ -15,6 +15,7 @@ class UsersView(APIView):
             user = serializer.save()
             refresh = RefreshToken.for_user(user)
             return Response({
+                "id": serializer.data["id"],
                 "user": request.data.get("username"),
                 "message" : "Usuario creado",
                 "refresh" : str(refresh),
@@ -33,11 +34,12 @@ class LoginUsersView(APIView):
     def post(self, request):
         username = request.data.get("username")
         password = request.data.get("password")
-
         user = authenticate(username=username, password=password)
+        serializer = UsersSerializer(user)
         if user is not None:
             refresh = RefreshToken.for_user(user)
             return Response({
+                "id": serializer.data["id"],
                 "user": username,
                 "message": "inicio de sesión",
                 "refresh": str(refresh),
@@ -67,7 +69,6 @@ class UsersSettings(APIView):
     def get(self, request):
         users = Users.objects.all()
         serializer = UsersSerializer(users, many=True)
-        print(serializer.data)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     

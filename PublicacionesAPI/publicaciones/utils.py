@@ -1,6 +1,5 @@
 import requests
 def get_user_data(token):
-    print(token)
     try:
         response = requests.get(
             'http://localhost:8000/api/user_data/',

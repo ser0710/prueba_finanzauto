@@ -8,13 +8,16 @@ export const useAuth = () => useContext(Context);
 const ConstAuth = ({ children }) => {
 
     const [user, setUser] = useState(localStorage.getItem("user"))
+    const [idUser, setIdUser] = useState(localStorage.getItem("id"))
 
     const login = async (credentials) => {
         try {
             const response = await axios.post('http://localhost:8000/api/login/', credentials)
             localStorage.setItem('token', response.data.access)
             localStorage.setItem('user', response.data.user)
+            localStorage.setItem('id', response.data.id)
             setUser(response.data.user)
+            setIdUser(response.data.id)
         } catch (error){
             throw new Error(error.response.data.error)
         }
@@ -25,7 +28,9 @@ const ConstAuth = ({ children }) => {
             const response = await axios.post("http://localhost:8000/api/register/", credentials)
             localStorage.setItem('token', response.data.access)
             localStorage.setItem('user', response.data.user)
+            localStorage.setItem('id', response.data.id)
             setUser(response.data.user)
+            setIdUser(response.data.id)
         } catch(error){
             if (error.response.data.password !== undefined){
                 if(error.response.data.password.errors !== undefined){
@@ -45,7 +50,7 @@ const ConstAuth = ({ children }) => {
     }
 
     return (
-        <Context.Provider value={{ user, login, register }}>
+        <Context.Provider value={{ user, login, register, idUser }}>
             {children}
         </Context.Provider>
     )
