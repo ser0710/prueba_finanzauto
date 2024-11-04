@@ -27,3 +27,12 @@ class PublicationsView(APIView):
             serializer = PublicationsSerializer(publications, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response({"error": "Error con el token de usuario"}, status=status.HTTP_401_UNAUTHORIZED)
+    
+    def delete(self, request, pk):
+        token = request.headers.get('Token')
+        user_data = get_user_data(token)
+        if user_data:
+            publication = Publications.objects.get(pk=pk)
+            publication.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response({"error": "Error con el token de usuario"}, status=status.HTTP_401_UNAUTHORIZED)
