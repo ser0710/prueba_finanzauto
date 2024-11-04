@@ -7,6 +7,7 @@ const UserData = () => {
     const navigate = useNavigate();
     const { user } = useAuth();
     const [userData, setUserData] = useState({
+        id: '',
         username: '',
         email: '',
         first_name: '',
@@ -82,6 +83,8 @@ const UserData = () => {
                 <input name="first_name" value={userData.first_name} onChange={handleChangeData}></input>
                 <h3>Apellido</h3>
                 <input name="last_name" value={userData.last_name} onChange={handleChangeData}></input>
+                <input name="last_name" value={userData.id} onChange={handleChangeData}></input>
+                
                 {errors.length > 0 && (
                     <ul>
                         {errors.map((error, index) => (
