@@ -1,4 +1,4 @@
-from django.urls import path, include
+from django.urls import path
 from .views import UsersView, UsersSettings, LoginUsersView, UpdateUserView, UserData
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 

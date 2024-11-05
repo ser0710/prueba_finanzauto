@@ -14,6 +14,7 @@ from pathlib import Path
 from corsheaders.defaults import default_headers
 import environ
 import os
+from datetime import timedelta
 
 
 
@@ -152,3 +153,7 @@ CORS_ALLOW_HEADERS = list(default_headers) + [
     'token',
     'params'
 ]
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60)
+}

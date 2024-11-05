@@ -44,7 +44,7 @@ const LogIn = () => {
                                 onChange={(e) => setUserData({ ...userData, password: e.target.value })}
                             />
                     
-                            <button class="btn btn-primary" type="submit">Iniciar sesión</button>
+                            <button className="btn btn-primary" type="submit">Iniciar sesión</button>
                         {errors}
                     </div>    
                 </div>
