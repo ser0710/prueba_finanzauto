@@ -44,8 +44,8 @@ const RegisterUsers = () => {
                         <input placeholder="Apellido" value={lastName} onChange={(e) => setLastName(e.target.value)}></input>
                         <input type="email" placeholder="Correo electrónico" value={email} onChange={(e) => setEmail(e.target.value)}></input>
                         <input type="password" placeholder="Contraseña" value={password} onChange={(e) => setPassword(e.target.value)}></input>
-                        <button class="btn btn-primary" type="submit">Registrarse</button>
-                        <button class="btn btn-danger" onClick={handleCancelRegister}>Cancelar</button>
+                        <button className="btn btn-primary" type="submit">Registrarse</button>
+                        <button className="btn btn-danger" onClick={handleCancelRegister}>Cancelar</button>
                         {errors.length > 0 && (
                             <ul>
                                 {errors.map((error, index) => (

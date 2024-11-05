@@ -17,7 +17,7 @@ const CreatePubForm = ({ handleCreatePub, handleCreate, handleCancel }) => {
                     <button className='btn btn-primary' type="submit">Guardar</button>
                 </div>
                 <div className='center_btn'>
-                    <button class="btn btn-danger" type="button" onClick={handleCancel}>Cancelar</button>
+                    <button className="btn btn-danger" type="button" onClick={handleCancel}>Cancelar</button>
                 </div>
                 
             </form>

@@ -18,5 +18,5 @@
 .btn_register{
     margin-top: 3%;
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
 }

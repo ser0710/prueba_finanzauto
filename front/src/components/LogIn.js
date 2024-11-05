@@ -24,6 +24,10 @@ const LogIn = () => {
         navigate('/register')
     }
 
+    const handleCancelLogin = () => {
+        navigate('/')
+    }
+
     return(
         <div className="container">
             <h1>Iniciar sesión</h1>
@@ -47,7 +51,8 @@ const LogIn = () => {
             </form>
             
             <div className="btn_register">
-                <button class="btn btn-primary" onClick={handleRegister}>Registrarse</button>
+                <button className="btn btn-danger" onClick={handleCancelLogin}>Cancelar</button>
+                <button className="btn btn-primary" onClick={handleRegister}>Registrarse</button>
             </div>
             
         </div>

@@ -63,11 +63,12 @@ const Home = () => {
                     Token: sessionStorage.getItem('token')
                 }
             })
+            console.log(response)
             const newPublication = {
                 id: response.data.id,
                 title: newPub.title,
                 content: newPub.content,
-                username: newPub.username
+                username: response.data.username
             }
             setPublications((prev) => [...prev, newPublication])
             setNewPub({ title: '', content: '' });
@@ -124,8 +125,8 @@ const Home = () => {
                 <div className="header">
                     {user ? <h1>{"Publicaciones de: " + user}</h1> :  <h1>{"Publicaciones"}</h1> }
                     <div>
-                        {user ? (<button class="btn btn-secondary" onClick={handleUserInfo}>Editar perfil</button>) : null}
-                        {user ? (<button class="btn btn-secondary" onClick={handleCloseSession}>Cerrar sesión</button>) : (<button class="btn btn-secondary" onClick={handleLogin}>Iniciar sesión</button>)}
+                        {user ? (<button className="btn btn-secondary" onClick={handleUserInfo}>Editar perfil</button>) : null}
+                        {user ? (<button className="btn btn-secondary" onClick={handleCloseSession}>Cerrar sesión</button>) : (<button className="btn btn-secondary" onClick={handleLogin}>Iniciar sesión</button>)}
                     </div>
 
                 </div>
@@ -133,8 +134,8 @@ const Home = () => {
             {
                 user && (
                     <div className="container center_btn"  >
-                        <button class="btn btn-secondary" onClick={() => { setAll(true); setCurrent('http://localhost:8001/api/publications/') }}>Ver todas</button>
-                        <button class="btn btn-secondary" onClick={() => { setAll(false); setCurrent(`http://localhost:8001/api/publication/${idUser}/`) }}>ver las mias</button>
+                        <button className="btn btn-secondary" onClick={() => { setAll(true); setCurrent('http://localhost:8001/api/publications/') }}>Ver todas</button>
+                        <button className="btn btn-secondary" onClick={() => { setAll(false); setCurrent(`http://localhost:8001/api/publication/${idUser}/`) }}>ver las mias</button>
                     </div>    
                 )
             }
@@ -142,16 +143,16 @@ const Home = () => {
                 <PubliList publi={publications} handleDelete={handleDelete}></PubliList>
             </div>
             <div className="container center_btn">
-                {!addPub && user && (<button class="btn btn-primary" onClick={() => setAddPub(true)}>Agregar</button>)}
+                {!addPub && user && (<button className="btn btn-primary" onClick={() => setAddPub(true)}>Agregar</button>)}
             </div>
             
 
             <div className="btn-container container">
                 <div id="btn_prev">
-                    {prevPage && (<button class="btn btn-secondary" onClick={handlePrevPage}>Anterior</button>)}
+                    {prevPage && (<button className="btn btn-secondary" onClick={handlePrevPage}>Anterior</button>)}
                 </div>
                 <div id="btn_next">
-                    {nextPage && (<button class="btn btn-secondary" onClick={handleNextPage}>Siguiente</button>)}
+                    {nextPage && (<button className="btn btn-secondary" onClick={handleNextPage}>Siguiente</button>)}
                 </div>
                 
             </div>

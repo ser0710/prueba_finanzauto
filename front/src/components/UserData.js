@@ -99,10 +99,10 @@ const UserData = () => {
                             </ul>
                         )}
                         <div  id="btn_actu">
-                            <button class="btn btn-primary" type="submit">Actualizar</button>
+                            <button className="btn btn-primary" type="submit">Actualizar</button>
                         </div>
                         <div  id="btn_actu">
-                            <button class="btn btn-danger" onClick={handleCancelChange}>Cancelar</button>
+                            <button className="btn btn-danger" onClick={handleCancelChange}>Cancelar</button>
                         </div>
                     </div>
                 </div>
